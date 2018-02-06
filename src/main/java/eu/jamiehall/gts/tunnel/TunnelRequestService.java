@@ -22,8 +22,7 @@ public class TunnelRequestService {
         this.configuration = configuration;
     }
 
-    private GuacamoleClientInformation getClientInformation(final TunnelRequest request)
-            throws GuacamoleException {
+    private GuacamoleClientInformation getClientInformation(final TunnelRequest request) throws GuacamoleException {
 
         // Get client information
         GuacamoleClientInformation info = new GuacamoleClientInformation();
@@ -64,18 +63,52 @@ public class TunnelRequestService {
         return info;
     }
 
-    public GuacamoleTunnel createTunnel(final TunnelRequest request) throws GuacamoleException {
+    private GuacamoleConfiguration buildConfig(final TunnelRequest request) throws GuacamoleException {
 
-        final GuacamoleClientInformation info = getClientInformation(request);
         final GuacamoleConfiguration config = new GuacamoleConfiguration();
 
         config.setProtocol(request.getType());
-        config.setParameter("hostname", request.getIp());
+        config.setParameter("hostname", request.getHostname());
         config.setParameter("port", request.getPort().toString());
+
+        if (request.getUsername() != null) {
+            config.setParameter("username", request.getUsername());
+        }
+
+        if (request.getPassword() != null) {
+            config.setParameter("password", request.getPassword());
+        }
 
         if (request.getIdentifier() != null) {
             config.setConnectionID(request.getIdentifier());
         }
+
+        if (request.getDomain() != null) {
+            config.setParameter("domain", request.getDomain());
+        }
+
+        if (request.getSecurity() != null) {
+            config.setParameter("security", request.getSecurity());
+        }
+
+        if (request.getIgnoreCert() != null) {
+            config.setParameter("ignore-cert", request.getIgnoreCert());
+
+        }
+
+        if (request.getDisableAuth() != null) {
+            config.setParameter("disable-auth", request.getDisableAuth());
+        }
+
+        return config;
+
+    }
+
+    public GuacamoleTunnel createTunnel(final TunnelRequest request) throws GuacamoleException {
+
+        final GuacamoleClientInformation info = getClientInformation(request);
+        final GuacamoleConfiguration config = buildConfig(request);
+
         // Connect to guacd, proxying a connection to the RDP server above
         final GuacamoleSocket socket = new ConfiguredGuacamoleSocket(
                 new InetGuacamoleSocket(this.configuration.getGuacdHost(), this.configuration.getGuacdPort()),

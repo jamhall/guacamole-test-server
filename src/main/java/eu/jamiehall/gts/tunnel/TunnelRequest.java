@@ -12,10 +12,9 @@ import java.util.List;
 public abstract class TunnelRequest {
 
     /**
-     * The ip address of remote server to establish a connection to
+     * The hostname or IP address of the RDP server Guacamole should connect to.
      */
-    public static final String IP_PARAMETER = "ip";
-
+    public static final String HOSTNAME = "hostname";
 
     /**
      * The remote desktop port to connect to
@@ -26,6 +25,42 @@ public abstract class TunnelRequest {
      * The remote desktop protocol to connect to
      */
     public static final String TYPE_PARAMETER = "type";
+
+    /**
+     * The remote desktop domain
+     */
+    public static final String DOMAIN_PARAMETER = "domain";
+
+    /**
+     * The remote desktop security (rdp, nla, tls, any)
+     */
+    public static final String SECURITY_PARAMETER = "security";
+
+    /**
+     * If set to "true", the certificate returned by the server will be ignored, even if that certificate cannot be validated.
+     * This is useful if you universally trust the server and your connection to the server,
+     * and you know that the server's certificate cannot be validated (for example, if it is self-signed).
+     */
+    public static final String IGNORE_CERT_PARAMETER = "ignore-cert";
+
+    /**
+     * If set to "true", authentication will be disabled.
+     * Note that this refers to authentication that takes place while connecting.
+     * Any authentication enforced by the server over the remote desktop session (such as a login dialog) will still take place.
+     * By default, authentication is enabled and only used when requested by the server.
+     * If you are using NLA, authentication must be enabled by definition.
+     */
+    public static final String DISABLE_AUTH_PARAMETER = "disable-auth";
+
+    /**
+     * The remote desktop username
+     */
+    public static final String USERNAME_PARAMETER = "username";
+
+    /**
+     * The remote desktop password
+     */
+    public static final String PASSWORD_PARAMETER = "password";
 
     /**
      * The name of the parameter containing the unique identifier of the object
@@ -72,7 +107,6 @@ public abstract class TunnelRequest {
      */
     public static final String IMAGE_PARAMETER = "image";
 
-
     /**
      * Returns the value of the parameter having the given name.
      *
@@ -117,112 +151,70 @@ public abstract class TunnelRequest {
         catch (NumberFormatException e) {
             throw new GuacamoleClientException("Parameter \"" + name + "\" must be a valid integer.", e);
         }
-
     }
 
-
-    /**
-     * Returns the identifier of the destination of the tunnel being requested.
-     * As there are multiple types of destination objects available, and within
-     * multiple data sources, the associated object type and data source are
-     * also necessary to determine what this identifier refers to.
-     *
-     * @return The identifier of the destination of the tunnel being requested.
-     * @throws GuacamoleException If the identifier was not present in the request.
-     */
     public String getIdentifier() throws GuacamoleException {
         return getParameter(IDENTIFIER_PARAMETER);
     }
 
-    /**
-     * Returns the display width desired for the Guacamole session over the
-     * tunnel being requested.
-     *
-     * @return The display width desired for the Guacamole session over the tunnel
-     * being requested, or null if no width was given.
-     * @throws GuacamoleException If the width specified was not a valid integer.
-     */
     public Integer getWidth() throws GuacamoleException {
         return getIntegerParameter(WIDTH_PARAMETER);
     }
 
-    /**
-     * Returns the display height desired for the Guacamole session over the
-     * tunnel being requested.
-     *
-     * @return The display height desired for the Guacamole session over the tunnel
-     * being requested, or null if no width was given.
-     * @throws GuacamoleException If the height specified was not a valid integer.
-     */
     public Integer getHeight() throws GuacamoleException {
         return getIntegerParameter(HEIGHT_PARAMETER);
     }
 
-    /**
-     * Returns the display resolution desired for the Guacamole session over
-     * the tunnel being requested, in DPI.
-     *
-     * @return The display resolution desired for the Guacamole session over the
-     * tunnel being requested, or null if no resolution was given.
-     * @throws GuacamoleException If the resolution specified was not a valid integer.
-     */
     public Integer getDPI() throws GuacamoleException {
         return getIntegerParameter(DPI_PARAMETER);
     }
 
-    /**
-     * Returns a list of all audio mimetypes declared as supported within the
-     * tunnel request.
-     *
-     * @return A list of all audio mimetypes declared as supported within the
-     * tunnel request, or null if no mimetypes were specified.
-     */
     public List<String> getAudioMimetypes() {
         return getParameterValues(AUDIO_PARAMETER);
     }
 
-    /**
-     * Returns a list of all video mimetypes declared as supported within the
-     * tunnel request.
-     *
-     * @return A list of all video mimetypes declared as supported within the
-     * tunnel request, or null if no mimetypes were specified.
-     */
     public List<String> getVideoMimetypes() {
         return getParameterValues(VIDEO_PARAMETER);
     }
 
-    /**
-     * Returns a list of all image mimetypes declared as supported within the
-     * tunnel request.
-     *
-     * @return A list of all image mimetypes declared as supported within the
-     * tunnel request, or null if no mimetypes were specified.
-     */
     public List<String> getImageMimetypes() {
         return getParameterValues(IMAGE_PARAMETER);
     }
 
-    /**
-     * Returns the ip address of the remote desktop
-     */
-    public String getIp() throws GuacamoleException {
-        return getParameter(IP_PARAMETER);
+    public String getHostname() throws GuacamoleException {
+        return getParameter(HOSTNAME);
     }
 
-    /**
-     * Returns the port of the remote desktop
-     */
     public Integer getPort() throws GuacamoleException {
         return getIntegerParameter(PORT_PARAMETER);
     }
 
-    /**
-     * Returns the type (vnc, rdp) of the remote desktop
-     */
     public String getType() throws GuacamoleException {
         return getParameter(TYPE_PARAMETER);
     }
 
+    public String getUsername() throws GuacamoleException {
+        return getParameter(USERNAME_PARAMETER);
+    }
+
+    public String getPassword() throws GuacamoleException {
+        return getParameter(PASSWORD_PARAMETER);
+    }
+
+    public String getDomain() throws GuacamoleException {
+        return getParameter(DOMAIN_PARAMETER);
+    }
+
+    public String getSecurity() throws GuacamoleException {
+        return getParameter(SECURITY_PARAMETER);
+    }
+
+    public String getIgnoreCert() throws GuacamoleException {
+        return getParameter(IGNORE_CERT_PARAMETER);
+    }
+
+    public String getDisableAuth() throws GuacamoleException {
+        return getParameter(DISABLE_AUTH_PARAMETER);
+    }
 
 }
