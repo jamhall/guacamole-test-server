@@ -67,7 +67,7 @@ public class TunnelRequestService {
 
         final GuacamoleConfiguration config = new GuacamoleConfiguration();
 
-        config.setProtocol(request.getType());
+        config.setProtocol("rdp");
         config.setParameter("hostname", request.getHostname());
         config.setParameter("port", request.getPort().toString());
 

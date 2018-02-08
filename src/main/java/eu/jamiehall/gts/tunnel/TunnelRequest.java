@@ -22,11 +22,6 @@ public abstract class TunnelRequest {
     public static final String PORT_PARAMETER = "port";
 
     /**
-     * The remote desktop protocol to connect to
-     */
-    public static final String TYPE_PARAMETER = "type";
-
-    /**
      * The remote desktop domain
      */
     public static final String DOMAIN_PARAMETER = "domain";
@@ -187,10 +182,6 @@ public abstract class TunnelRequest {
 
     public Integer getPort() throws GuacamoleException {
         return getIntegerParameter(PORT_PARAMETER);
-    }
-
-    public String getType() throws GuacamoleException {
-        return getParameter(TYPE_PARAMETER);
     }
 
     public String getUsername() throws GuacamoleException {
